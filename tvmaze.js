@@ -28,16 +28,22 @@ async function searchShows(query) {
   // });
   // breaks here with solution code
   // CORS
-  let res = await axios.get(`https://www.tvmaze.com/search/shows?q=${query}`);
-  console.log(res);
-  // return [
-  //   {
-  //     id: res.show.id,
-  //     name: res.show.name,
-  //     summary: res.show.summary,
-  //     image: res.show.image,
-  //   },
-  // ];
+  let res = await axios.get(`https://api.tvmaze.com/search/shows?q=${query}`, {
+    params: {
+      q: query,
+    },
+  });
+  let shows = res.data.map(function (item) {
+    console.log(item);
+    return {
+      id: item.show.id,
+      name: item.show.name,
+      summary: item.show.summary,
+      image: item.show.image,
+    };
+  });
+  console.log(shows);
+  return shows;
 }
 
 /** Populate shows list:
@@ -88,20 +94,20 @@ $('#search-form').on('submit', async function handleSearch(evt) {
  */
 
 async function getEpisodes(id) {
-  let res = await axios.get(`http://api.tvmaze.com/shows/${id}/episodes`);
+  let res = await axios.get(`https://api.tvmaze.com/shows/${id}/episodes`);
   console.log(res);
   // TODO: get episodes from tvmaze
   //       you can get this by making GET request to
   //       http://api.tvmaze.com/shows/SHOW-ID-HERE/episodes
   // TODO: return array-of-episode-info, as described in docstring above
-  for (let episode of episodes) {
-    return [
-      {
-        id: episode.id,
-        name: episode.name,
-        season: episode.season,
-        number: episode.number,
-      },
-    ];
-  }
+  // for (let episode in episodes) {
+  //   return [
+  //     {
+  //       id: episode.id,
+  //       name: episode.name,
+  //       season: episode.season,
+  //       number: episode.number,
+  //     },
+  //   ];
+  // }
 }
